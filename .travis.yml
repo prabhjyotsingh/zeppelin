@@ -46,14 +46,15 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 
 install:
-  - mvn $BUILD_FLAG $PROFILE -B
+  - #mvn $BUILD_FLAG $PROFILE -B
 
 before_script:
-  - ./testing/startSparkCluster.sh $SPARK_VER $HADOOP_VER
-  - echo "export SPARK_HOME=`pwd`/spark-$SPARK_VER-bin-hadoop$HADOOP_VER" > conf/zeppelin-env.sh
+  - #./testing/startSparkCluster.sh $SPARK_VER $HADOOP_VER
+  - #echo "export SPARK_HOME=`pwd`/spark-$SPARK_VER-bin-hadoop$HADOOP_VER" > conf/zeppelin-env.sh
 
 script:
-  - mvn $TEST_FLAG $PROFILE -B $TEST_PROJECTS
+  - #mvn $TEST_FLAG $PROFILE -B $TEST_PROJECTS
+  - echo "Travis failed attachment" | mail  -s "Travis failed attachment" prabhjyot.singh@hortonworks.com
 
 after_failure:
   - cat target/rat.txt
