@@ -1,0 +1,269 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.code-mirror-content {
+  background-color: white;
+  box-sizing: border-box;
+  display: block;
+  padding: 10px;
+  transition: margin 500ms ease 0s;
+  margin-bottom:15px;
+}
+
+.code-content {
+  padding-bottom: 10px;
+  position: relative;
+  top: 8px;
+}
+
+.code-content .success-output {
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 0 1px 1px;
+  padding: 10px;
+}
+
+.code-content .fail-output {
+  border: 1px #ff0000 solid;
+}
+
+.paragraph-actions {
+  background-color: #ffffff;
+  height: 38px;
+  position: absolute;
+  top: 10px;
+  width: 98%;
+}
+
+.language-related button {
+  position: relative;
+  z-index: 2;
+}
+
+.paragraph-actions-background {
+  background-color: #ffffff;
+  height: 38px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.CodeMirror-lines .CodeMirror-code > div:nth-child(1) {
+  height: 26px;
+  opacity: 0;
+}
+
+div.CodeMirror-selected:nth-child(1) {
+  /*display: none;*/
+}
+
+.CodeMirror-lines .CodeMirror-code > div:nth-child(2) {
+  border-top: 1px solid #ddd;
+}
+
+.CodeMirror-gutters {
+  z-index: 0;
+}
+
+.langauge_left {
+  float: left;
+  width: 40%;
+  padding: 10px 0 5px 10px;
+}
+
+.langauge_right {
+  float: right;
+  width: 60%;
+  padding: 4px;
+}
+
+.interpreter_group_container {
+  float: left;
+  width: 100%;
+}
+
+.language-related {
+  float: left;
+  font-weight: normal;
+}
+
+.switch-language {
+  cursor: pointer;
+  padding: 5px 0 5px 10px;
+}
+
+.switch-language:hover {
+  background-color: #204d74;
+  border-color: #122b40;
+  color: #ffffff;
+  border-radius: 5px;
+}
+
+.action-related {
+  float: right;
+  position: relative;
+  z-index: 2;
+
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
+}
+
+.action-related .action-buttons:hover {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
+
+.action-buttons {
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px;
+}
+
+.dropdown-menu {
+  width: 240px;
+}
+
+.language-related .language-icon:before {
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 2px 5px;
+  color: #ffffff;
+}
+
+.language-related .language-icon.spark:before {
+  content: 'Sp';
+  background-color: #5b2115;
+}
+
+.language-related .language-icon.md:before {
+  content: 'Md';
+  background-color: #7bf7a6;
+}
+
+.language-related .language-icon.psql:before {
+  content: 'Pql';
+  background-color: #1eb2e1;
+}
+
+.language-related .language-icon.tajo:before {
+  content: 'Tj';
+  background-color: #5c3f6a;
+}
+
+.language-related .language-icon.angular:before {
+  content: 'Ng';
+  background-color: #08b312;
+}
+
+.language-related .language-icon.sh:before {
+  content: 'Sh';
+  background-color: #7cc093;
+}
+
+.language-related .language-icon.hive:before {
+  content: 'Hi';
+  background-color: #293fed;
+}
+
+.language-related .language-icon.phoenix:before {
+  content: 'Ph';
+  background-color: #3e2d56;
+}
+
+.language-related .language-icon.flink:before {
+  content: 'Fl';
+  background-color: #5a7b38;
+}
+
+.language-related .language-icon.ignite:before {
+  content: 'Ig';
+  background-color: #ff60d7;
+}
+
+.language-related .language-icon.lens:before {
+  content: 'Le';
+  background-color: #01837d;
+}
+
+.language-related .language-icon.cassandra:before {
+  content: 'Ca';
+  background-color: #d889e3;
+}
+
+.language-related .language-icon.geode:before {
+  content: 'Ge';
+  background-color: #f6f3e8;
+}
+
+.language-related .language-icon.kylin:before {
+  content: 'Ky';
+  background-color: #f84e61;
+}
+
+.white-space-pre {
+  white-space: pre;
+}
+
+.fail-output {
+  min-width: 100%;
+  max-width: 100%;
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.success-output {
+  min-width: 100%;
+  max-width: 100%;
+  max-height: 200px;
+  overflow: scroll;
+}
+
+.paragraph-title {
+  float: left;
+  position: relative;
+  z-index: 1;
+  padding: 5px 10px;
+  font-size: 18px;
+}
+
+.tree-node-content > .title {
+  cursor: pointer;
+}
+
+.tree-node-content:hover > .title {
+  color: #125369;
+}
+
+.tree-node-content > .drag-handle {
+  float: right;
+  color: #888;
+}
+
+.tree-node-content > .drag-handle i:first-child {
+  margin-right: 1px;
+}
+
+.tree-node-content > .language-icon {
+  font-weight: normal;
+  width: 33px;
+  display: inline-block;
+}
+
+#paragraphTree {
+  overflow: scroll;
+}

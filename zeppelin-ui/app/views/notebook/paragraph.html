@@ -1,0 +1,107 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="col-md-12 code-mirror-content">
+
+  <div class="code-content">
+    {{paragraph.text === '' ? emptyFunction() : ''}}
+    <ui-codemirror id="{{paragraph.id}}" ui-codemirror-opts="{{paragraph.editorOptions}}" ng-model="paragraph.text"
+                   ng-if="!paragraph.config.editorHide">
+    </ui-codemirror>
+
+    <div class="success-output" ng-if="paragraph.result.code=='SUCCESS'">
+      <div ng-if="getResultType() === 'TABLE'" id="p{{paragraph.id}}_table" style="white-space: inherit">
+        <div class="actions">
+          <ul class="list-inline text-info">
+            <li class="fa fa-table" data-toggle="tooltip" data-placement="top" title="" data-original-title="Table"
+                ng-click="showTable()"></li>
+            <li class="fa fa-line-chart" data-toggle="tooltip" data-placement="top" title="" data-original-title="Graph"
+                ng-click="showGraph()"></li>
+          </ul>
+        </div>
+        <div id="p{{paragraph.id}}_table_content" class="white-space-pre">
+        </div>
+        <div id="p{{paragraph.id}}_graph_content" style="display: none;">
+          <div ng-include src="'views/polestar.html'"></div>
+        </div>
+      </div>
+      <div id="p{{paragraph.id}}_html" class="white-space-pre">
+        {{renderResult()}}
+      </div>
+
+    </div>
+
+    <div class="fail-output white-space-pre" ng-if="paragraph.result.code=='ERROR'">
+      {{paragraph.result.msg}}
+    </div>
+  </div>
+
+  <div class="paragraph-actions">
+    <div class="paragraph-actions-background"></div>
+    <div class="language-related">
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+          <span class="language-icon {{language.split('%')[1].split('.')[0]}}">{{language.split('.')[1]}}</span>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li ng-repeat="interpreterGroup in interpreterBindings">
+            <div class="{{interpreterGroup.name}}_bg interpreter_group_container">
+              <div class="{{interpreterGroup.name}}_icon langauge_left">
+                <span class="language-icon {{interpreterGroup.name}}">{{interpreterGroup.name}}</span>
+              </div>
+              <div class="interpreters_languages langauge_right">
+                <div ng-repeat="interpreters in interpreterGroup.interpreters" class="switch-language"
+                     ng-click="switchLanguage('%' + interpreterGroup.group + '.' + interpreters.name)">
+                  <span>{{interpreters.name}}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="paragraph-title">{{paragraph.title}}</div>
+
+    <div class="action-related">
+      <!--play/pause-->
+      <span class="action-buttons fa fa-play" tooltip-placement="top"
+            tooltip="Run this paragraph (Shift+Enter)"
+            ng-click="runParagraph(getEditorValue())"
+            ng-show="paragraph.status!='RUNNING' && paragraph.status!='PENDING'"></span>
+
+    <span class="action-buttons fa fa-pause" tooltip-placement="top" tooltip="Cancel"
+          ng-click="cancelParagraph()"
+          ng-show="paragraph.status=='RUNNING' || paragraph.status=='PENDING'"></span>
+
+      <!--show/hide code-->
+      <span class="action-buttons fa" ng-click="toggleEditor()"
+            ng-class="{'fa-expand' : paragraph.config.editorHide, 'fa-compress': !paragraph.config.editorHide}"
+            tooltip="{{(paragraph.config.editorHide ? 'Show' : 'Hide') + ' editor'}}"
+      ></span>
+
+      <!--delete-->
+
+
+      <span class="action-buttons fa fa-trash-o" ng-click="deleteParagraph()" data-toggle="confirmation-popout"
+            data-placement="top" data-original-title="" title=""></span>
+
+      <!--settings-->
+      <span class="action-buttons fa fa-wrench"></span>
+    </div>
+
+
+  </div>
+</div>

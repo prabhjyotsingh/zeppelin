@@ -1,0 +1,78 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="section" ng-init="init()">
+  <div class="container home-container">
+
+    <div class="well well-sm">
+
+      <form class="navbar-form search-box" role="search">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search" name="q">
+
+          <div class="input-group-btn">
+            <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+          </div>
+        </div>
+      </form>
+      <div class="action-buttons pull-right">
+        <button type="button" class="btn btn-primary">Add New</button>
+        <button type="button" class="btn btn-danger" ng-show="deleteEnabled">Delete</button>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="datasource-tile img-rounded img-thumbnail box-shadow--2dp" ng-repeat="note in filteredNotes"
+           ng-class="{'active' : workspaceSelect[note.id].selected}" >
+        <div class="properties">
+          <h4 class="text-primary text-uppercase">
+            <a ng-href="#/workspace/{{note.id}}">{{note.name}}</a>
+          </h4>
+          <p>Historical Data since Jun 1981, Contains over 4B Records</p>
+        </div>
+        <div class="actions">
+          <ul class="list-inline text-info" ng-init="initTooltips()">
+            <li class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="Edit"></li>
+            <li class="fa fa-trash-o" data-toggle="tooltip" data-placement="top" title="Delete"></li>
+            <li class="fa fa-files-o" data-toggle="tooltip" data-placement="top" title="Duplicate"></li>
+            <li class="fa fa-cog" data-toggle="tooltip" data-placement="top" title="Settings"></li>
+            <li class="fa separator">&nbsp;</li>
+            <li>
+              <div class="checkbox">
+                <input id="datasourceSelect{{$index}}" type="checkbox" ng-model="workspaceSelect[note.id].selected"/>
+                <label for="datasourceSelect{{$index}}">Select</label>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <span class="fa fa-check-circle selected-circle" ng-show="workspaceSelect[note.id].selected"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-right">
+        <pagination
+          ng-model="currentPage"
+          total-items="notes.length"
+          max-size="maxSize"
+          boundary-links="true">
+        </pagination>
+      </div>
+    </div>
+  </div>
+</div>

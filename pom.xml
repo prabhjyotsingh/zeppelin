@@ -107,6 +107,7 @@
     <module>elasticsearch</module>
     <module>alluxio</module>
     <module>zeppelin-web</module>
+    <module>zeppelin-ui</module>
     <module>zeppelin-server</module>
     <module>zeppelin-distribution</module>
   </modules>

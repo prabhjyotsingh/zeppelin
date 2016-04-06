@@ -1,0 +1,338 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+body {
+  padding: 0;
+}
+
+.box-shadow--2dp {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12)
+}
+
+.box-shadow--3dp {
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)
+}
+
+.box-shadow--4dp {
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
+}
+
+.box-shadow--6dp {
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2)
+}
+
+.box-shadow--8dp {
+  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12), 0 5px 5px -3px rgba(0, 0, 0, .2)
+}
+
+.box-shadow--16dp {
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.home-container {
+
+}
+
+.home-container > .well-sm {
+  margin-top: 10px;
+}
+
+.home-container > .well-sm .glyphicon-search {
+  font-size: 13px;
+}
+
+.home-container > .well-sm .search-box {
+  display: inline-block;
+}
+
+.home-container > .well-sm .action-buttons {
+  margin: 5px 10px;
+}
+
+.home-container > .well-sm .action-buttons.float_right {
+  float: right;
+  padding-top: 8px;
+  padding-right: 14px;
+}
+
+.home-container > .well-sm .search-box .input-group {
+  width: 400px;
+}
+
+.z-main-tabs .fa {
+  padding: 10px;
+}
+
+.navbar-header {
+  width: 600px;
+}
+
+.datasource-tile {
+  margin: 10px;
+  padding: 0px;
+  width: 262px;
+  height: 200px;
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.datasource-tile.active {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.datasource-tile h4:after {
+  content: '\00a0';
+}
+
+.datasource-tile > h4 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.datasource-tile > .properties {
+  padding: 15px;
+  height: 160px;
+  overflow: scroll;
+}
+
+.datasource-tile > .actions {
+  margin: 0px;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  border-top: 1px solid #ddd;
+  padding: 0px 3px;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.2s, opacity 0.2s linear;
+  z-index: 1;
+  background: #fff;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.datasource-tile > .selected-circle {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 24px;
+  color: #66afe9;
+}
+
+.datasource-tile:hover > .actions {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s linear;
+}
+
+.datasource-tile > .actions .list-inline {
+  margin: 4px;
+  font-size: 18px;
+  color: #555;
+}
+
+.datasource-tile > .actions .fa:hover, .datasource-tile > .actions .checkbox:hover {
+  color: #31708f;
+}
+
+.datasource-tile > .actions .fa {
+  cursor: pointer;
+  margin: 0px 4px;
+}
+
+.datasource-tile > .actions .separator {
+  border-left: 1px solid #ddd;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin: 0px;
+}
+
+.datasource-tile > .actions .right {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  float: right;
+}
+
+.datasource-tile > .actions .checkbox {
+  font-size: 14px;
+}
+
+.datasource-tile > .actions label {
+  padding-left: 5px;
+}
+
+.datasource-tile > .actions * {
+  display: inline-block;
+}
+
+.tab-content > .tab-pane {
+  padding: 10px;
+}
+
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+}
+
+.cm-s-mdn-like.CodeMirror {
+  background-image: url('');
+}
+
+.side-nav {
+  float: left;
+  width: 290px;
+  display: table-cell;
+  top: 0px;
+}
+
+.rows {
+  float: right;
+  width: 886px;
+}
+
+@media screen and (max-width: 1200px) {
+  .rows {
+    width: 75%;
+  }
+
+  .side-nav {
+    width: 220px;
+  }
+}
+
+.div-inline-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-content {
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+}
+
+.tree-content li {
+  padding: 5px;
+  border-bottom: 1px solid rgba(221, 221, 221, 0.35);
+}
+
+.tree-content li:hover {
+  background: #d6d6d6;
+}
+
+.angular-ui-tree-placeholder {
+  background: #f0f9ff none repeat scroll 0 0;
+  border: 2px dashed #bed2db;
+  box-sizing: border-box;
+}
+
+.angular-ui-tree-placeholder {
+  background: #f0f9ff none repeat scroll 0 0;
+  border: 2px dashed #bed2db;
+  box-sizing: border-box;
+}
+
+.angular-ui-tree-placeholder {
+  margin: 5px 0;
+  min-height: 30px;
+  padding: 0;
+}
+
+.angular-ui-tree-node, .angular-ui-tree-placeholder {
+  display: block;
+  line-height: 20px;
+  margin: 0;
+  min-height: 20px;
+  padding: 0;
+  position: relative;
+}
+
+.csv-source > label {
+  padding: 0px;
+}
+
+.csv-options label {
+  font-weight: normal;
+}
+
+.csv-delimiter.other {
+  display: inline-block;
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+.csv-delimiter.other input {
+  width: 50px;
+}
+
+.continueSpinner {
+  font-size: 18px;
+}
+
+.csv-preview {
+  width: 540px;
+  height: 200px;
+  word-break: break-word;
+  overflow-y: scroll;
+  border: 1px solid #ddd;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+}
+
+.csv-preview label, .form-group label {
+  padding-left: 5px;
+  font-weight: normal;
+}
+
+.csv-delimiter-info {
+  margin: 5px 0px;
+  font-size: 12px;
+}
+
+.server-disconnected {
+  color: rgb(240, 48, 0);
+  margin-top: 18px;
+}
+
+.server-connected {
+  color: rgb(0, 204, 0);
+  margin-top: 18px;
+}

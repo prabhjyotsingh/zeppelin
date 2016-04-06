@@ -1,0 +1,223 @@
+<!doctype html>
+<!--
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css({.tmp,app}) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.min.css" />
+  <link rel="stylesheet" href="bower_components/angular-wizard/dist/angular-wizard.min.css" />
+  <link rel="stylesheet" href="bower_components/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/highlightjs/styles/default.css" />
+  <link rel="stylesheet" href="bower_components/angular-tooltips/dist/angular-tooltips.min.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
+  <link rel="stylesheet" href="bower_components/selectize/dist/css/selectize.css" />
+  <!-- endbower -->
+  <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/addon/hint/show-hint.css"/>
+
+  <link rel="stylesheet" href="bower_components/codemirror/theme/3024-day.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/3024-night.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/abcdef.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/ambiance.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/ambiance-mobile.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/base16-dark.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/base16-light.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/blackboard.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/cobalt.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/colorforth.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/dracula.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/eclipse.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/elegant.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/erlang-dark.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/icecoder.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/lesser-dark.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/liquibyte.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/material.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/mbo.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/mdn-like.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/midnight.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/monokai.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/neat.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/neo.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/night.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/paraiso-dark.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/paraiso-light.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/pastel-on-dark.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/rubyblue.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/seti.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/solarized.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/the-matrix.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/tomorrow-night-bright.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/tomorrow-night-eighties.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/ttcn.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/twilight.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/vibrant-ink.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/xq-dark.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/xq-light.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/yeti.css"/>
+  <link rel="stylesheet" href="bower_components/codemirror/theme/zenburn.css"/>
+  <!-- endbuild -->
+  <!-- build:css({.tmp,app}) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/notebook.css">
+  <link rel="stylesheet" href="styles/polestar.css">
+  <!-- endbuild -->
+</head>
+<body ng-app="zeppelinUI">
+<!--[if lte IE 8]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+
+<div ng-include="'views/header.html'"></div>
+
+<div class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="nav nav-tabs z-main-tabs">
+          <li class-on-active-link><a ng-href="#/home">
+            <div class="fa fa-database fa-2x"></div>
+            Data Sources</a></li>
+          <li class-on-active-link><a ng-href="#/workspace">
+            <div class="fa fa-desktop fa-2x"></div>
+            Workspaces</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <div ng-view=""></div>
+</div>
+
+
+<!-- build:js({.tmp,app}) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
+<script src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
+<script src="bower_components/angular-elastic/elastic.js"></script>
+<script src="bower_components/angular-messages/angular-messages.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/codemirror/lib/codemirror.js"></script>
+<script src="bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+<script src="bower_components/angular-websocket/angular-websocket.min.js"></script>
+<script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/angular-wizard/dist/angular-wizard.min.js"></script>
+<script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+<script src="bower_components/angular-zeroclipboard/src/angular-zeroclipboard.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/highlightjs/highlight.pack.js"></script>
+<script src="bower_components/d3/d3.js"></script>
+<script src="bower_components/topojson/topojson.js"></script>
+<script src="bower_components/chronicle/chronicle.js"></script>
+<script src="bower_components/jsondiffpatch/public/build/jsondiffpatch.js"></script>
+<script src="bower_components/angular-tooltips/dist/angular-tooltips.min.js"></script>
+<script src="bower_components/z-schema/dist/ZSchema-browser-min.js"></script>
+<script src="bower_components/angular-order-object-by/src/ng-order-object-by.js"></script>
+<script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+<script src="bower_components/datalib/datalib.js"></script>
+<script src="bower_components/vega/vega.js"></script>
+<script src="bower_components/angular-mocks/angular-mocks.js"></script>
+<script src="bower_components/tether/tether.js"></script>
+<script src="bower_components/drop/dist/js/drop.js"></script>
+<script src="bower_components/heap/lib/heap.js"></script>
+<script src="bower_components/vega-lite/vega-lite.js"></script>
+<script src="bower_components/angular-ui-select/dist/select.js"></script>
+<script src="bower_components/sifter/sifter.js"></script>
+<script src="bower_components/microplugin/src/microplugin.js"></script>
+<script src="bower_components/selectize/dist/js/selectize.js"></script>
+<script src="bower_components/angular-google-analytics/dist/angular-google-analytics.min.js"></script>
+<script src="bower_components/vega-lite-ui/vlui.js"></script>
+<!-- endbower -->
+<script src="bower_components/codemirror/mode/javascript/javascript.js"></script>
+<script src="bower_components/codemirror/mode/groovy/groovy.js"></script>
+<script src="bower_components/codemirror/mode/markdown/markdown.js"></script>
+<script src="bower_components/codemirror/mode/python/python.js"></script>
+<script src="bower_components/codemirror/mode/r/r.js"></script>
+<script src="bower_components/codemirror/mode/shell/shell.js"></script>
+<script src="bower_components/codemirror/mode/sql/sql.js"></script>
+<script src="bower_components/codemirror/mode/clike/clike.js"></script>
+<script src="bower_components/codemirror/addon/hint/show-hint.js"></script>
+<script src="bower_components/codemirror/addon/hint/javascript-hint.js"></script>
+<script src="bower_components/codemirror/addon/hint/anyword-hint.js"></script>
+<script src="bower_components/codemirror/addon/hint/sql-hint.js"></script>
+<script src="bower_components/papaparse/papaparse.js"></script>
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+
+
+<script src="scripts/app.js"></script>
+<script src="scripts/routes.js"></script>
+
+
+<script src="scripts/controllers/polestar/spec/SpecService.js"></script>
+<script src="scripts/controllers/polestar/pills/PillsService.js"></script>
+<script src="scripts/controllers/polestar/polestar/PolestarController.js"></script>
+
+
+<script src="scripts/services/Common.js"></script>
+<script src="scripts/services/CodeMirrorRelated.js"></script>
+<script src="scripts/services/BaseURLService.js"></script>
+<script src="scripts/services/WebsocketEventsService.js"></script>
+<script src="scripts/services/WebsocketMessageService.js"></script>
+
+<script src="scripts/directives/classOnActiveLink.js"></script>
+
+<script src="scripts/filters/FormatCsvFilter.js"></script>
+
+
+
+
+
+<script src="components/shelves/shelves.js"></script>
+<script src="components/schemalistitem/schemalistitem.js"></script>
+<script src="components/schemalist/schemalist.js"></script>
+<script src="components/propertyeditor/propertyeditor.js"></script>
+<script src="components/fielddefeditor/fielddefeditor.js"></script>
+<script src="components/alertmessages/alertmessages.js"></script>
+
+
+
+<script src="scripts/controllers/UserController.js"></script>
+<script src="scripts/controllers/HomeController.js"></script>
+<script src="scripts/controllers/WorkspaceController.js"></script>
+<script src="scripts/controllers/AddSourceController.js"></script>
+<script src="scripts/controllers/notebook/NotebookController.js"></script>
+<script src="scripts/controllers/notebook/ParagraphController.js"></script>
+<!-- endbuild -->
+</body>
+</html>

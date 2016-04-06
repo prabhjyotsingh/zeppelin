@@ -1,0 +1,69 @@
+<div class="card scroll-y abs-100">
+  <a class="right"  ng-click="clear()"><i class="fa fa-eraser"></i> Clear</a>
+  <h2>Encoding</h2>
+
+  <div class="shelf-pane shelf-encoding-pane full-width">
+    <h3>Positional</h3>
+    <field-def-editor enc-type="'x'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.x">
+    </field-def-editor>
+    <field-def-editor
+      enc-type="'y'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.y">
+    </field-def-editor>
+    <field-def-editor enc-type="'col'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.col"
+    >
+    </field-def-editor>
+    <field-def-editor enc-type="'row'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.row">
+    </field-def-editor>
+  </div>
+  <div class="shelf-pane shelf-marks-pane full-width">
+    <div class="right">
+      <select class="markselect" ng-model="Spec.spec.marktype"
+              ng-options="type for type in ['point', 'tick', 'bar', 'line', 'area', 'text']"
+              ng-change="markChange()"></select>
+    </div>
+    <h3>Marks</h3>
+
+    <field-def-editor enc-type="'size'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.size">
+    </field-def-editor>
+    <field-def-editor enc-type="'color'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.color">
+    </field-def-editor>
+    <field-def-editor enc-type="'shape'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.shape">
+    </field-def-editor>
+    <field-def-editor enc-type="'detail'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.detail">
+    </field-def-editor>
+    <field-def-editor enc-type="'text'"
+      enc="Spec.spec.encoding"
+      marktype="Spec.spec.marktype"
+      field-def-schema="schema.properties.encoding.properties.text">
+    </field-def-editor>
+  </div>
+
+  <!-- <div class="shelf-pane shelf-config-pane full-width">
+    <h3>Config</h3>
+    <null-filter-directive></null-filter-directive>
+  </div> -->
+</div>

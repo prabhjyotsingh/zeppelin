@@ -41,8 +41,15 @@ if [[ -z "$ZEPPELIN_PID_DIR" ]]; then
 fi
 
 if [[ -z "${ZEPPELIN_WAR}" ]]; then
-  if [[ -d "${ZEPPELIN_HOME}/zeppelin-web/dist" ]]; then
-    export ZEPPELIN_WAR="${ZEPPELIN_HOME}/zeppelin-web/dist"
+  if [[ -z "${ZEPPELIN_WEB}" ]]; then
+    export ZEPPELIN_WEB="zeppelin-web"
+  fi
+  if [[ -z "${ZEPPELIN_WEB_ENV}" ]]; then
+    export ZEPPELIN_WEB_ENV="dist"
+  fi
+
+  if [[ -d "${ZEPPELIN_HOME}/${ZEPPELIN_WEB}/${ZEPPELIN_WEB_ENV}" ]]; then
+    export ZEPPELIN_WAR="${ZEPPELIN_HOME}/${ZEPPELIN_WEB}/${ZEPPELIN_WEB_ENV}"
   else
     export ZEPPELIN_WAR=$(find -L "${ZEPPELIN_HOME}" -name "zeppelin-web*.war")
   fi

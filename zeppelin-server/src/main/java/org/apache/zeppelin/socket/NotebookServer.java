@@ -199,12 +199,43 @@ public class NotebookServer extends WebSocketServlet implements
           case CHECKPOINT_NOTEBOOK:
             checkpointNotebook(conn, notebook, messagereceived);
             break;
+          case TEMP_RUN_NOTE:
+            runTempParagraph(conn, notebook, messagereceived);
+            break;
           default:
             broadcastNoteList();
             break;
       }
     } catch (Exception e) {
       LOG.error("Can't handle message", e);
+    }
+  }
+
+  private void runTempParagraph(NotebookSocket conn, Notebook notebook,
+                                Message fromMessage) throws IOException {
+
+    Note note = notebook.createNote();
+    note.addParagraph(); // it's an empty note. so add one paragraph
+    Map<String, Object> config = new HashMap<>();
+    config.put("isTempExecute", true);
+    note.setConfig(config);
+
+    note.persist();
+
+    Paragraph p = note.getLastParagraph();
+    String text = (String) fromMessage.get("paragraph");
+    p.setText(text);
+
+    note.persist();
+    try {
+      note.run(p.getId());
+    } catch (Exception ex) {
+      LOG.error("Exception from run", ex);
+      if (p != null) {
+        p.setReturn(
+            new InterpreterResult(InterpreterResult.Code.ERROR, ex.getMessage()), ex);
+        p.setStatus(Status.ERROR);
+      }
     }
   }
 
@@ -374,6 +405,19 @@ public class NotebookServer extends WebSocketServlet implements
 
   public void broadcastNote(Note note) {
     broadcast(note.id(), new Message(OP.NOTE).put("note", note));
+    if (note.getConfig().get("isTempExecute") != null) {
+      if (((Boolean) note.getConfig().get("isTempExecute")) == true
+          && note.getLastParagraph().getResult() != null) {
+        broadcastAll(new Message(OP.TEMP_NOTES_INFO).put("note", note));
+        Message msg = new Message(OP.DEL_NOTE);
+        msg.put("id", note.getId());
+        try {
+          removeNote(null, null, notebook(), msg);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
   }
 
   public void broadcastNoteList() {
