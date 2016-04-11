@@ -179,7 +179,10 @@ angular.module('zeppelinUI')
       csvString = csvString || '';
       var max = 0;
       var detectedDelimiter;
-      var possibleDelimiters = [{value: ',', count: 0}, {value: ';', count: 0}, {value: '\t', count: 0}];
+      var possibleDelimiters = [{value: ',', count: 0}, {value: ';', count: 0}, {
+        value: '\t',
+        count: 0
+      }];
       possibleDelimiters.forEach(function(delimiter) {
           delimiter.count += csvString.split(delimiter.value).length;
         }

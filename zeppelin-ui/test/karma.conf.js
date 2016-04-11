@@ -1,19 +1,7 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Karma configuration
+// http://karma-runner.github.io/0.12/config/configuration-file.html
+// Generated on 2014-08-29 using
+// generator-karma 0.8.3
 
 module.exports = function(config) {
   'use strict';
@@ -26,10 +14,7 @@ module.exports = function(config) {
     basePath: '../',
 
     // testing framework to use (jasmine/mocha/qunit/...)
-    // as well as any additional frameworks (requirejs/chai/sinon/...)
-    frameworks: [
-      'jasmine'
-    ],
+    frameworks: ['jasmine'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -51,13 +36,13 @@ module.exports = function(config) {
       'app/bower_components/angular-ui-router/release/angular-ui-router.js',
       'app/bower_components/angular-ui-tree/dist/angular-ui-tree.js',
       'app/bower_components/angular-websocket/angular-websocket.min.js',
-      'app/bower_components/lodash/lodash.js',
       'app/bower_components/angular-wizard/dist/angular-wizard.min.js',
       'app/bower_components/zeroclipboard/dist/ZeroClipboard.js',
       'app/bower_components/angular-zeroclipboard/src/angular-zeroclipboard.js',
       'app/bower_components/bootstrap/dist/js/bootstrap.js',
       'app/bower_components/highlightjs/highlight.pack.js',
       'app/bower_components/papaparse/papaparse.js',
+      'app/bower_components/lodash/lodash.js',
       'app/bower_components/d3/d3.js',
       'app/bower_components/topojson/topojson.js',
       'app/bower_components/chronicle/chronicle.js',
@@ -79,18 +64,17 @@ module.exports = function(config) {
       'app/bower_components/selectize/dist/js/selectize.js',
       'app/bower_components/angular-google-analytics/dist/angular-google-analytics.min.js',
       'app/bower_components/vega-lite-ui/vlui.js',
+      'app/bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js',
       // endbower
-      'app/scripts/**/*.js',
-      //'test/mock/**/*.js',
+
       'test/spec/**/*.js'
     ],
 
     // list of files / patterns to exclude
-    exclude: [
-    ],
+    exclude: [],
 
     // web server port
-    port: 8080,
+    port: 9002,
 
     // Start these browsers, currently available:
     // - Chrome
@@ -104,15 +88,16 @@ module.exports = function(config) {
       'PhantomJS'
     ],
 
-    reporters: 'coverage',
+    reporters: ['coverage','progress'],
 
     preprocessors: {
-      'app/scripts/*/{*.js,!(test)/**/*.js}': 'coverage'
+      'src/*/{*.js,!(test)/**/*.js}': 'coverage'
     },
 
     coverageReporter: {
       type: 'html',
-      dir: 'reports/coverage'
+      dir: '../reports/zeppelin-web-coverage',
+      subdir: '.'
     },
 
     // Which plugins to enable
@@ -124,7 +109,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: true,
+    singleRun: false,
 
     colors: true,
 

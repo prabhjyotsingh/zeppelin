@@ -1,4 +1,7 @@
 node_modules
 app/bower_components
 dist
-zeppelin-ui/app/bower_components
+.tmp
+etc
+reports
+target

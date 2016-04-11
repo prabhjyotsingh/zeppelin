@@ -28,7 +28,7 @@ limitations under the License.
       </form>
       <div class="action-buttons pull-right">
         <button type="button" class="btn btn-primary">Add New</button>
-        <button type="button" class="btn btn-danger" ng-show="deleteEnabled">Delete</button>
+        <button type="button" class="btn btn-danger" ng-show="deleteEnabled" ng-click="deleteNote()">Delete</button>
       </div>
     </div>
 
@@ -37,7 +37,7 @@ limitations under the License.
            ng-class="{'active' : workspaceSelect[note.id].selected}" >
         <div class="properties">
           <h4 class="text-primary text-uppercase">
-            <a ng-href="#/workspace/{{note.id}}">{{note.name}}</a>
+            <a ng-href="#/workspace/{{note.id}}">{{note.name||note.id}}</a>
           </h4>
           <p>Historical Data since Jun 1981, Contains over 4B Records</p>
         </div>

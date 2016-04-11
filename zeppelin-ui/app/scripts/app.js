@@ -40,32 +40,21 @@ angular
     'ngDragDrop',
     'Chronicle',
     '720kb.tooltips',
-    'vlui'
+    'vlui',
+    'ngMessages'
   ])
   .constant('ZSchema', window.ZSchema)
   .constant('jsondiffpatch', window.jsondiffpatch)
   .constant('Papa', window.Papa);
 
-function auth() {
-  var $http = angular.injector(['ng']).get('$http');
-  var BaseURLService = angular.injector(['zeppelinUI']).get('BaseURLService');
-  // withCredentials when running locally via grunt
-  $http.defaults.withCredentials = true;
 
+angular.module('zeppelinUI').run(function($rootScope, BaseURLService, $http) {
+  $http.defaults.withCredentials = true;
   return $http.get(BaseURLService.getRestApiBase() + '/security/ticket').then(function(response) {
-    angular.module('zeppelinUI').run(function($rootScope) {
-      $rootScope.ticket = angular.fromJson(response.data).body;
-    });
+    $rootScope.ticket = angular.fromJson(response.data).body;
   }, function(errorResponse) {
+    console.log(errorResponse);
     // Handle error case
   });
-}
 
-function bootstrapApplication() {
-  angular.bootstrap(document, ['zeppelinUI']);
-}
-
-
-angular.element(document).ready(function() {
-  auth().then(bootstrapApplication);
 });

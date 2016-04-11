@@ -58,4 +58,11 @@ angular.module('zeppelinUI')
       $scope.deleteEnabled = false;
     }, true);
 
+    $scope.deleteNote = function() {
+      console.log($scope.workspaceSelect);
+      for (var tile in $scope.workspaceSelect) {
+        WebSocketMessageService.deleteNotebook(tile);
+      }
+    };
+
   });

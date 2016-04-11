@@ -22,15 +22,18 @@ angular.module('zeppelinUI').service('WebSocketMessageService', function($rootSc
     },
 
     createNotebook: function(noteName) {
-      WebSocketEventsService.sendNewEvent({op: 'NEW_NOTE',data: {name: noteName}});
+      WebSocketEventsService.sendNewEvent({op: 'NEW_NOTE', data: {name: noteName}});
     },
 
     deleteNotebook: function(noteId) {
       WebSocketEventsService.sendNewEvent({op: 'DEL_NOTE', data: {id: noteId}});
     },
 
-    cloneNotebook: function(noteIdToClone, newNoteName ) {
-      WebSocketEventsService.sendNewEvent({op: 'CLONE_NOTE', data: {id: noteIdToClone, name: newNoteName}});
+    cloneNotebook: function(noteIdToClone, newNoteName) {
+      WebSocketEventsService.sendNewEvent({
+        op: 'CLONE_NOTE',
+        data: {id: noteIdToClone, name: newNoteName}
+      });
     },
 
     getNotebookList: function() {
@@ -46,15 +49,21 @@ angular.module('zeppelinUI').service('WebSocketMessageService', function($rootSc
     },
 
     updateNotebook: function(noteId, noteName, noteConfig) {
-      WebSocketEventsService.sendNewEvent({op: 'NOTE_UPDATE', data: {id: noteId, name: noteName, config : noteConfig}});
+      WebSocketEventsService.sendNewEvent({
+        op: 'NOTE_UPDATE',
+        data: {id: noteId, name: noteName, config: noteConfig}
+      });
     },
 
     moveParagraph: function(paragraphId, newIndex) {
-      WebSocketEventsService.sendNewEvent({ op: 'MOVE_PARAGRAPH', data : {id: paragraphId, index: newIndex}});
+      WebSocketEventsService.sendNewEvent({
+        op: 'MOVE_PARAGRAPH',
+        data: {id: paragraphId, index: newIndex}
+      });
     },
 
     insertParagraph: function(newIndex) {
-      WebSocketEventsService.sendNewEvent({ op: 'INSERT_PARAGRAPH', data : {index: newIndex}});
+      WebSocketEventsService.sendNewEvent({op: 'INSERT_PARAGRAPH', data: {index: newIndex}});
     },
 
     updateAngularObject: function(noteId, paragraphId, name, value, interpreterGroupId) {
@@ -120,11 +129,11 @@ angular.module('zeppelinUI').service('WebSocketMessageService', function($rootSc
 
     completion: function(paragraphId, buf, cursor) {
       WebSocketEventsService.sendNewEvent({
-        op : 'COMPLETION',
-        data : {
-          id : paragraphId,
-          buf : buf,
-          cursor : cursor
+        op: 'COMPLETION',
+        data: {
+          id: paragraphId,
+          buf: buf,
+          cursor: cursor
         }
       });
     },
@@ -134,7 +143,7 @@ angular.module('zeppelinUI').service('WebSocketMessageService', function($rootSc
         op: 'COMMIT_PARAGRAPH',
         data: {
           id: paragraphId,
-          title : paragraphTitle,
+          title: paragraphTitle,
           paragraph: paragraphData,
           config: paragraphConfig,
           params: paragraphParams
@@ -161,7 +170,7 @@ angular.module('zeppelinUI').service('WebSocketMessageService', function($rootSc
       });
     },
 
-    isConnected: function(){
+    isConnected: function() {
       return WebSocketEventsService.isConnected();
     }
 
