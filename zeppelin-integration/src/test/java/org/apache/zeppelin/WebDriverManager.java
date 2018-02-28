@@ -23,6 +23,8 @@ import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -89,15 +91,29 @@ public class WebDriverManager {
         profile.setPreference("network.proxy.type", 0);
 
         System.setProperty(GeckoDriverService.GECKO_DRIVER_EXE_PROPERTY, tempPath + "geckodriver");
-        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, "false");
+        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, "true");
 
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(ffox);
         firefoxOptions.setProfile(profile);
-        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.ERROR);
+        firefoxOptions.addPreference("log", "{level: error}");
+        // also tried:
+        firefoxOptions.addPreference("log.level", "error");
+        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.FATAL);
 
-        GeckoDriverService.Builder builder = new GeckoServiceLocalBuilder().usingPort(0);
-        GeckoDriverService gecko = builder.build();
+
+
+        Map<String, String> environment = new HashMap<>();
+        if ("true".equals(System.getenv("TRAVIS"))) {
+          environment.put("DISPLAY", ":99");
+        }
+
+        GeckoDriverService gecko = new GeckoServiceLocalBuilder()
+            .usingPort(0)
+            .withEnvironment(environment)
+            .build();
+        gecko.start();
+
         driver = new FirefoxDriver(gecko);
 
       } catch (Exception e) {
