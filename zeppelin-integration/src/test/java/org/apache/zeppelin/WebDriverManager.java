@@ -19,6 +19,7 @@ package org.apache.zeppelin;
 
 import static org.junit.Assert.fail;
 
+import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -32,6 +33,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxDriver.SystemProperty;
+import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.GeckoDriverService;
@@ -92,7 +94,12 @@ public class WebDriverManager {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(ffox);
         firefoxOptions.setProfile(profile);
-        driver = new FirefoxDriver(firefoxOptions);
+        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.ERROR);
+
+        GeckoDriverService.Builder builder = new GeckoServiceLocalBuilder().usingPort(0);
+        GeckoDriverService gecko = builder.build();
+        driver = new FirefoxDriver(gecko);
+
       } catch (Exception e) {
         LOG.error("Exception in WebDriverManager while FireFox Driver ", e);
       }
@@ -151,6 +158,18 @@ public class WebDriverManager {
 
     driver.manage().window().maximize();
     return driver;
+  }
+
+  private static final class GeckoServiceLocalBuilder extends GeckoDriverService.Builder {
+
+    @Override
+    protected ImmutableList<String> createArgs() {
+      ImmutableList.Builder<String> argsBuilder = ImmutableList.builder();
+      argsBuilder.addAll(super.createArgs());
+      argsBuilder.add("--log");
+      argsBuilder.add("error");
+      return argsBuilder.build();
+    }
   }
 
   public static void downloadGeekoDriver(int firefoxVersion, String tempPath) {
