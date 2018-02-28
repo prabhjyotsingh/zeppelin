@@ -20,6 +20,7 @@ package org.apache.zeppelin;
 import static org.junit.Assert.fail;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -96,22 +97,17 @@ public class WebDriverManager {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(ffox);
         firefoxOptions.setProfile(profile);
-        firefoxOptions.addPreference("log", "{level: error}");
-        // also tried:
-        firefoxOptions.addPreference("log.level", "error");
-        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.FATAL);
+        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.WARN);
 
-
-
-        Map<String, String> environment = new HashMap<>();
+        ImmutableMap<String,String> environment = ImmutableMap.of();
         if ("true".equals(System.getenv("TRAVIS"))) {
-          environment.put("DISPLAY", ":99");
+          environment = ImmutableMap.of("DISPLAY", ":99");
         }
 
-        GeckoDriverService gecko = new GeckoServiceLocalBuilder()
-            .usingPort(0)
-            .withEnvironment(environment)
-            .build();
+        ImmutableList<String> argsBuilder = ImmutableList.of("--log", " error");
+
+        GeckoDriverService gecko = new GeckoDriverService(new File(tempPath + "geckodriver"), 0,
+            argsBuilder, environment);
         gecko.start();
 
         driver = new FirefoxDriver(gecko);
@@ -174,18 +170,6 @@ public class WebDriverManager {
 
     driver.manage().window().maximize();
     return driver;
-  }
-
-  private static final class GeckoServiceLocalBuilder extends GeckoDriverService.Builder {
-
-    @Override
-    protected ImmutableList<String> createArgs() {
-      ImmutableList.Builder<String> argsBuilder = ImmutableList.builder();
-      argsBuilder.addAll(super.createArgs());
-      argsBuilder.add("--log");
-      argsBuilder.add("error");
-      return argsBuilder.build();
-    }
   }
 
   public static void downloadGeekoDriver(int firefoxVersion, String tempPath) {
