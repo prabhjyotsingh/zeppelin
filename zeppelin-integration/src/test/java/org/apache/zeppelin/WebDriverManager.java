@@ -19,7 +19,6 @@ package org.apache.zeppelin;
 
 import static org.junit.Assert.fail;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -91,7 +90,7 @@ public class WebDriverManager {
         profile.setPreference("network.proxy.type", 0);
 
         System.setProperty(GeckoDriverService.GECKO_DRIVER_EXE_PROPERTY, tempPath + "geckodriver");
-        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, "true");
+//        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, "true");
 
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(ffox);
