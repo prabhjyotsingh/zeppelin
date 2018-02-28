@@ -20,7 +20,6 @@ package org.apache.zeppelin;
 import static org.junit.Assert.fail;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -97,17 +96,17 @@ public class WebDriverManager {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(ffox);
         firefoxOptions.setProfile(profile);
-        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.WARN);
+        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.INFO);
 
-        ImmutableMap<String,String> environment = ImmutableMap.of();
+        Map<String, String> environment = new HashMap<>();
         if ("true".equals(System.getenv("TRAVIS"))) {
-          environment = ImmutableMap.of("DISPLAY", ":99");
+          environment.put("DISPLAY", ":99");
         }
 
-        ImmutableList<String> argsBuilder = ImmutableList.of("--log", " error");
-
-        GeckoDriverService gecko = new GeckoDriverService(new File(tempPath + "geckodriver"), 0,
-            argsBuilder, environment);
+        GeckoDriverService gecko = new GeckoDriverService.Builder()
+            .usingPort(0)
+            .withEnvironment(environment)
+            .build();
         gecko.start();
 
         driver = new FirefoxDriver(gecko);
