@@ -18,6 +18,9 @@
 package org.apache.zeppelin;
 
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openqa.selenium.WebDriver;
@@ -40,6 +43,22 @@ public class ZeppelinITUtils {
     if (logOutput) {
       LOG.info("Finished.");
     }
+  }
+
+  public static void performDoubleClick(WebDriver driver, WebElement element) {
+    ((JavascriptExecutor) driver).executeScript("return (function(target) {\n"
+        + "if (target.fireEvent) {\n"
+        + "target.fireEvent('ondblclick');\n"
+        + "} else {\n"
+        + "var evObj = new MouseEvent('dblclick', {\n"
+        + "bubbles: true,\n"
+        + "cancelable: true,\n"
+        + "view: window\n"
+        + "});\n"
+        + "target.dispatchEvent(evObj);\n"
+        + "}\n"
+        + "return true;\n"
+        + "})(arguments[0]);", element);
   }
 
   public static void restartZeppelin() {

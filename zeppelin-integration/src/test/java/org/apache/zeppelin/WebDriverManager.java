@@ -90,7 +90,7 @@ public class WebDriverManager {
         profile.setPreference("network.proxy.type", 0);
 
         System.setProperty(GeckoDriverService.GECKO_DRIVER_EXE_PROPERTY, tempPath + "geckodriver");
-//        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, "true");
+        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, tempPath + "geckodriver");
 
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(ffox);

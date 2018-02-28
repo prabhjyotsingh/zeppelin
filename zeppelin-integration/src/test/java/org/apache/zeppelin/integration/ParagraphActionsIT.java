@@ -29,6 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -328,6 +329,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
           driver.findElement(By.xpath("//div[contains(@class,'col-md-12')]")).isDisplayed(),
           CoreMatchers.equalTo(true));
       for (Integer newWidth = 1; newWidth <= 11; newWidth++) {
+        clickAndWait(By.xpath(getParagraphXPath(1)));
         clickAndWait(By.xpath(getParagraphXPath(1) + "//span[@class='icon-settings']"));
         String visibleText = newWidth.toString();
         new Select(driver.findElement(By.xpath(getParagraphXPath(1)
@@ -350,6 +352,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
       Float height = Float.valueOf(driver.findElement(By.xpath("//div[contains(@class,'ace_content')]"))
           .getCssValue("height").replace("px", ""));
       for (Integer newFontSize = 10; newFontSize <= 20; newFontSize++) {
+        clickAndWait(By.xpath(getParagraphXPath(1)));
         clickAndWait(By.xpath(getParagraphXPath(1) + "//span[@class='icon-settings']"));
         String visibleText = newFontSize.toString();
         new Select(driver.findElement(By.xpath(getParagraphXPath(1)
@@ -489,10 +492,9 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
       waitForParagraph(1, "READY");
 
       setTextOfParagraph(1, "%md");
-      driver.findElement(By.xpath(getParagraphXPath(1) + "//textarea")).sendKeys(Keys.ARROW_RIGHT);
-      driver.findElement(By.xpath(getParagraphXPath(1) + "//textarea")).sendKeys(Keys.ENTER);
-      driver.findElement(By.xpath(getParagraphXPath(1) + "//textarea")).sendKeys(Keys.SHIFT + "3");
-      driver.findElement(By.xpath(getParagraphXPath(1) + "//textarea")).sendKeys(" abc");
+      driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class,'ace_content')]")).sendKeys(Keys.ARROW_RIGHT);
+      driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class,'ace_content')]")).sendKeys(Keys.ENTER);
+      driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class,'ace_content')]")).sendKeys("# abc");
 
       runParagraph(1);
       waitForParagraph(1, "FINISHED");
@@ -509,7 +511,8 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
       driver.navigate().refresh();
       waitForParagraph(1, "FINISHED");
 
-      action.doubleClick(driver.findElement(By.xpath(getParagraphXPath(1)))).perform();
+      ZeppelinITUtils.performDoubleClick(driver, driver.findElement(
+          By.xpath(getParagraphXPath(1) + "//div[contains(@class, 'resultContained')]")));
       ZeppelinITUtils.sleep(1000, false);
       collector.checkThat("Markdown editor is shown after double click ",
           driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@ng-if, 'paragraph.config.editorHide')]")).isDisplayed(),
@@ -580,6 +583,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
               driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class, 'text plainTextContent')]")).getText(),
               CoreMatchers.equalTo("Howdy 1"));
 
+      ZeppelinITUtils.sleep(1000, false);
       driver.findElement(By.xpath(getParagraphXPath(1) + "//span[@class='icon-settings']")).click();
       clickAndWait(By.xpath(getParagraphXPath(1) + "//ul/li/form/input[contains(@ng-checked, 'true')]"));
 
@@ -653,6 +657,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
 
       Select dropDownMenu = new Select(driver.findElement(By.xpath("(" + (getParagraphXPath(1) + "//select)[1]"))));
       dropDownMenu.selectByVisibleText("Apple");
+      ZeppelinITUtils.sleep(1000, false);
       collector.checkThat("After selection in drop down menu, output should display the new option we selected",
               driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class, 'text plainTextContent')]")).getText(),
               CoreMatchers.equalTo("Howdy 1\nHowdy "));
