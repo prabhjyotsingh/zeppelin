@@ -22,6 +22,7 @@ import com.google.common.base.Function;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
@@ -125,7 +126,8 @@ abstract public class AbstractZeppelinIT {
   }
 
   protected void clickAndWait(final By locator) {
-    pollingWait(locator, MAX_IMPLICIT_WAIT).click();
+    Actions action = new Actions(driver);
+    action.click(pollingWait(locator, MAX_IMPLICIT_WAIT)).build().perform();
     ZeppelinITUtils.sleep(1000, true);
   }
 

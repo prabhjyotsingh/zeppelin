@@ -257,13 +257,14 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
           CoreMatchers.equalTo(true));
 
       Select dropDownMenu = new Select(driver.findElement(By.xpath((xpathToDropdownMenu))));
-      dropDownMenu.selectByVisibleText("2");
+      dropDownMenu.getFirstSelectedOption().sendKeys("2");
       waitForParagraph(1, "FINISHED");
       collector.checkThat("If 'RunOnSelectionChange' is true, the paragraph result will be updated right after click any options in the dropdown menu ",
           driver.findElement(By.xpath(xpathToResultText)).getText(),
           CoreMatchers.equalTo("My selection is 2"));
 
       // 2. set 'RunOnSelectionChange' to false
+      driver.findElement(By.xpath(getParagraphXPath(1))).click();
       driver.findElement(By.xpath(getParagraphXPath(1) + "//span[@class='icon-settings']")).click();
       driver.findElement(By.xpath(xpathToRunOnSelectionChangeCheckbox)).click();
       collector.checkThat("If 'Run on selection change' checkbox is unchecked, 'paragraph.config.runOnSelectionChange' will be false ",
@@ -271,7 +272,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
           CoreMatchers.equalTo(true));
 
       Select sameDropDownMenu = new Select(driver.findElement(By.xpath((xpathToDropdownMenu))));
-      sameDropDownMenu.selectByVisibleText("1");
+      sameDropDownMenu.getFirstSelectedOption().sendKeys("1");
       waitForParagraph(1, "FINISHED");
       collector.checkThat("If 'RunOnSelectionChange' is false, the paragraph result won't be updated even if we select any options in the dropdown menu ",
           driver.findElement(By.xpath(xpathToResultText)).getText(),
@@ -351,6 +352,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
       Float height = Float.valueOf(driver.findElement(By.xpath("//div[contains(@class,'ace_content')]"))
           .getCssValue("height").replace("px", ""));
       for (Integer newFontSize = 10; newFontSize <= 20; newFontSize++) {
+        clickAndWait(By.xpath(getParagraphXPath(1)));
         clickAndWait(By.xpath(getParagraphXPath(1) + "//span[@class='icon-settings']"));
         String visibleText = newFontSize.toString();
         new Select(driver.findElement(By.xpath(getParagraphXPath(1)
@@ -576,6 +578,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
       Select dropDownMenu = new Select(driver.findElement(By.xpath("(" + (getParagraphXPath(1) + "//select)[1]"))));
 
       dropDownMenu.selectByVisibleText("Alice");
+      ZeppelinITUtils.sleep(1000, false);
       collector.checkThat("After selection in drop down menu, output should display the newly selected option",
           driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class, 'text plainTextContent')]")).getText(),
           CoreMatchers.equalTo("Howdy 1"));
@@ -619,8 +622,8 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
       driver.findElement(By.xpath(getParagraphXPath(1) + "//span[@class='icon-settings']")).click();
       clickAndWait(By.xpath(getParagraphXPath(1) + "//ul/li/form/input[contains(@ng-checked, 'true')]"));
 
-      WebElement secondCheckbox = driver.findElement(By.xpath("(" + getParagraphXPath(1) + "//input[@type='checkbox'])[2]"));
-      secondCheckbox.click();
+      clickAndWait(By.xpath(getParagraphXPath(1)));
+      clickAndWait(By.xpath("(" + getParagraphXPath(1) + "//input[@type='checkbox'])[2]"));
       collector.checkThat("After 'Run on selection change' checkbox is unchecked, the paragraph should not run if check box state is modified",
           driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class, 'text plainTextContent')]")).getText(),
           CoreMatchers.containsString("Greetings leia and luke"));
@@ -652,7 +655,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
               CoreMatchers.equalTo("Howdy \nHowdy "));
 
       Select dropDownMenu = new Select(driver.findElement(By.xpath("(" + (getParagraphXPath(1) + "//select)[1]"))));
-      dropDownMenu.selectByVisibleText("Apple");
+      dropDownMenu.getFirstSelectedOption().sendKeys("Apple");
       ZeppelinITUtils.sleep(1000, false);
       collector.checkThat("After selection in drop down menu, output should display the new option we selected",
               driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class, 'text plainTextContent')]")).getText(),
@@ -729,7 +732,7 @@ public class ParagraphActionsIT extends AbstractZeppelinIT {
 
       Select dropDownMenu = new Select(driver.findElement(By.xpath("(" + (getNoteFormsXPath() + "//select)[1]"))));
 
-      dropDownMenu.selectByVisibleText("Bob");
+      dropDownMenu.getFirstSelectedOption().sendKeys("Bob");
       collector.checkThat("After selection in drop down menu, output should not be changed",
           driver.findElement(By.xpath(getParagraphXPath(1) + "//div[contains(@class, 'text plainTextContent')]")).getText(),
           CoreMatchers.equalTo("Howdy "));
