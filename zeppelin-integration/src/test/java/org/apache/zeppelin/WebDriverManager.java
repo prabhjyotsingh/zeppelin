@@ -19,9 +19,12 @@ package org.apache.zeppelin;
 
 import static org.junit.Assert.fail;
 
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -29,9 +32,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxDriver.SystemProperty;
+import org.openqa.selenium.firefox.FirefoxDriverLogLevel;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.GeckoDriverService;
@@ -48,12 +54,41 @@ public class WebDriverManager {
 
   public final static Logger LOG = LoggerFactory.getLogger(WebDriverManager.class);
 
-  private static String downLoadsDir = "";
+  private static String downLoadsDir = FileUtils.getTempDirectory().toString();
 
-  private static String GECKODRIVER_VERSION = "0.19.1";
+  private static String GECKODRIVER_VERSION = "0.20.1";
+  private static String CHROME_VERSION = "2.39";
 
   public static WebDriver getWebDriver() {
     WebDriver driver = null;
+
+    if (driver == null) {
+      try {
+        String tempPath = downLoadsDir + "/chrome/";
+        downloadChrome(tempPath);
+        System.setProperty("webdriver.chrome.driver", tempPath + "chromedriver");
+
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("disable-extensions");
+        chromeOptions.addArguments("--disable-extensions");
+        chromeOptions.addArguments("--start-maximized");
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+
+
+        ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
+            .usingDriverExecutable(new File(tempPath + "chromedriver"))
+            .usingAnyFreePort()
+            .withEnvironment(ImmutableMap.of("DISPLAY",":99"))
+            .build();
+        chromeDriverService.start();
+
+        driver = new ChromeDriver(chromeDriverService, chromeOptions);
+
+      } catch (Exception e) {
+        LOG.error("Exception in WebDriverManager while ChromeDriver ", e);
+      }
+    }
 
     if (driver == null) {
       try {
@@ -64,8 +99,6 @@ public class WebDriverManager {
         }
         int firefoxVersion = WebDriverManager.getFirefoxVersion();
         LOG.info("Firefox version " + firefoxVersion + " detected");
-
-        downLoadsDir = FileUtils.getTempDirectory().toString();
 
         String tempPath = downLoadsDir + "/firefox/";
 
@@ -87,22 +120,28 @@ public class WebDriverManager {
         profile.setPreference("network.proxy.type", 0);
 
         System.setProperty(GeckoDriverService.GECKO_DRIVER_EXE_PROPERTY, tempPath + "geckodriver");
-        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, "false");
+        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, tempPath + "geckodriver");
 
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.setBinary(ffox);
         firefoxOptions.setProfile(profile);
-        driver = new FirefoxDriver(firefoxOptions);
+        firefoxOptions.setLogLevel(FirefoxDriverLogLevel.INFO);
+
+        Map<String, String> environment = new HashMap<>();
+        if ("true".equals(System.getenv("TRAVIS"))) {
+          environment.put("DISPLAY", ":99");
+        }
+
+        GeckoDriverService gecko = new GeckoDriverService.Builder()
+            .usingPort(0)
+            .withEnvironment(environment)
+            .build();
+        gecko.start();
+
+        driver = new FirefoxDriver(gecko);
+
       } catch (Exception e) {
         LOG.error("Exception in WebDriverManager while FireFox Driver ", e);
-      }
-    }
-
-    if (driver == null) {
-      try {
-        driver = new ChromeDriver();
-      } catch (Exception e) {
-        LOG.error("Exception in WebDriverManager while ChromeDriver ", e);
       }
     }
 
@@ -113,6 +152,7 @@ public class WebDriverManager {
         LOG.error("Exception in WebDriverManager while SafariDriver ", e);
       }
     }
+    AbstractZeppelinIT.driver = driver;
 
     String url;
     if (System.getenv("url") != null) {
@@ -123,8 +163,7 @@ public class WebDriverManager {
 
     long start = System.currentTimeMillis();
     boolean loaded = false;
-    driver.manage().timeouts().implicitlyWait(AbstractZeppelinIT.MAX_IMPLICIT_WAIT,
-        TimeUnit.SECONDS);
+    AbstractZeppelinIT.setImplicitlyWaitDefault();
     driver.get(url);
 
     while (System.currentTimeMillis() - start < 60 * 1000) {
@@ -151,6 +190,36 @@ public class WebDriverManager {
 
     driver.manage().window().maximize();
     return driver;
+  }
+
+  public static void downloadChrome(String tempPath) {
+    String chromeDriverUrlString = "http://chromedriver.storage.googleapis.com/" +
+        CHROME_VERSION + "/chromedriver_";
+
+    LOG.info("Chrome driver will be downloaded to " + tempPath);
+    try {
+      if (SystemUtils.IS_OS_WINDOWS) {
+        chromeDriverUrlString += "win32.zip";
+      } else if (SystemUtils.IS_OS_LINUX) {
+        chromeDriverUrlString += "linux64.zip";
+      } else if (SystemUtils.IS_OS_MAC_OSX) {
+        chromeDriverUrlString += "mac64.zip";
+      }
+
+      File chromeDriver = new File(tempPath + "chromedriver");
+      File geekoDriverZip = new File(tempPath + "chromedriver.tar");
+      File geekoDriverDir = new File(tempPath);
+      URL geekoDriverUrl = new URL(chromeDriverUrlString);
+      if (!chromeDriver.exists()) {
+        FileUtils.copyURLToFile(geekoDriverUrl, geekoDriverZip);
+        Archiver archiver = ArchiverFactory.createArchiver("zip");
+        archiver.extract(geekoDriverZip, geekoDriverDir);
+      }
+
+    } catch (IOException e) {
+      LOG.error("Download of Chrome driver falied in path " + tempPath);
+    }
+    LOG.info("Download of Chrome driver successful");
   }
 
   public static void downloadGeekoDriver(int firefoxVersion, String tempPath) {

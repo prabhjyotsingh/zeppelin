@@ -18,10 +18,12 @@
 package org.apache.zeppelin;
 
 
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openqa.selenium.WebDriver;
-import java.util.concurrent.TimeUnit;
 
 public class ZeppelinITUtils {
 
@@ -29,17 +31,30 @@ public class ZeppelinITUtils {
 
   public static void sleep(long millis, boolean logOutput) {
     if (logOutput) {
-      LOG.info("Starting sleeping for " + (millis / 1000) + " seconds...");
-      LOG.info("Caller: " + Thread.currentThread().getStackTrace()[2]);
+      if (Thread.currentThread().getStackTrace()[2].getClassName()
+          .equals("org.apache.zeppelin.AbstractZeppelinIT")) {
+        LOG.info(
+            "Sleeping for " + millis + " milliseconds...\nCaller: " + Thread.currentThread()
+                .getStackTrace()[3]);
+      } else {
+        LOG.info(
+            "Sleeping for " + millis + " milliseconds...\nCaller: " + Thread.currentThread()
+                .getStackTrace()[2]);
+      }
+
     }
     try {
       Thread.sleep(millis);
     } catch (InterruptedException e) {
       LOG.error("Exception in WebDriverManager while getWebDriver ", e);
     }
-    if (logOutput) {
-      LOG.info("Finished.");
-    }
+  }
+
+  public static void performDoubleClick(WebDriver driver, WebElement element) {
+    //This will be fixed in FireFox-59 which is not yet released.
+    //https://bugzilla.mozilla.org/show_bug.cgi?id=1385476
+    Actions action = new Actions(driver);
+    action.doubleClick(element).perform();
   }
 
   public static void restartZeppelin() {

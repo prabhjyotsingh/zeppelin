@@ -22,6 +22,7 @@ import com.google.common.base.Function;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
@@ -71,6 +72,7 @@ abstract public class AbstractZeppelinIT {
     By locator = By.xpath(getParagraphXPath(paragraphNo)
         + "//div[contains(@class, 'control')]//span[2][contains(.,'" + state + "')]");
     WebElement element = pollingWait(locator, MAX_PARAGRAPH_TIMEOUT_SEC);
+    ZeppelinITUtils.sleep(500, false);
     return element.isDisplayed();
   }
 
@@ -104,6 +106,10 @@ abstract public class AbstractZeppelinIT {
   }
 
   protected void createNewNote() {
+    if (driver.findElements(By.xpath("//div[contains(@class, \"col-md-4\")]"
+        + "/div/h5/a[contains(.,'Create new note')]")).size() == 0) {
+      driver.findElement(By.className("navbar-title")).click();
+    }
     clickAndWait(By.xpath("//div[contains(@class, \"col-md-4\")]/div/h5/a[contains(.,'Create new" +
         " note')]"));
 
@@ -124,8 +130,19 @@ abstract public class AbstractZeppelinIT {
   }
 
   protected void clickAndWait(final By locator) {
-    pollingWait(locator, MAX_IMPLICIT_WAIT).click();
-    ZeppelinITUtils.sleep(1000, false);
+    Actions action = new Actions(driver);
+    action.click(pollingWait(locator, MAX_IMPLICIT_WAIT)).build().perform();
+    ZeppelinITUtils.sleep(500, true);
+  }
+
+  protected static void setImplicitlyWaitDefault() {
+    driver.manage().timeouts().implicitlyWait(AbstractZeppelinIT.MAX_IMPLICIT_WAIT,
+        TimeUnit.SECONDS);
+  }
+
+  protected static void setImplicitlyWaitMinimum() {
+    driver.manage().timeouts().implicitlyWait(AbstractZeppelinIT.MIN_IMPLICIT_WAIT,
+        TimeUnit.SECONDS);
   }
 
   protected void handleException(String message, Exception e) throws Exception {
