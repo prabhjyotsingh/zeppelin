@@ -74,6 +74,8 @@ public class WebDriverManager {
         chromeOptions.addArguments("--start-maximized");
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--headless");
+        chromeOptions.addArguments("--disable-gpu");
 
 
         ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
