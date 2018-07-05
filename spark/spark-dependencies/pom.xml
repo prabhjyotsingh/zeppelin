@@ -481,9 +481,12 @@
             </goals>
             <configuration>
               <target>
-                <delete dir="../../interpreter/spark/pyspark" />
-                <copy file="${project.build.directory}/${spark.archive}/python/lib/py4j-${py4j.version}-src.zip" todir="../../interpreter/spark/pyspark" />
-                <zip basedir="${project.build.directory}/${spark.archive}/python" destfile="${project.build.directory}/../../../interpreter/spark/pyspark/pyspark.zip" includes="pyspark/*.py,pyspark/**/*.py" />
+                <delete dir="../../interpreter/spark/pyspark"/>
+                <copy todir="../../interpreter/spark/pyspark"
+                      file="${project.build.directory}/${spark.archive}/python/lib/py4j-${py4j.version}-src.zip"/>
+                <zip destfile="${project.build.directory}/../../../interpreter/spark/pyspark/pyspark.zip"
+                     basedir="${project.build.directory}/${spark.archive}/python"
+                     includes="pyspark/*.py,pyspark/**/*.py"/>
               </target>
             </configuration>
           </execution>
