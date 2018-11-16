@@ -60,11 +60,14 @@ public class FileSystemStorage {
   public FileSystemStorage(ZeppelinConfiguration zConf, String path) throws IOException {
     this.zConf = zConf;
     this.hadoopConf = new Configuration();
-    // disable checksum for local file system. because interpreter.json may be updated by
-    // non-hadoop filesystem api
-    // disable caching for file:// scheme to avoid getting LocalFS which does CRC checks
-    this.hadoopConf.setBoolean("fs.file.impl.disable.cache", true);
-    this.hadoopConf.set("fs.file.impl", RawLocalFileSystem.class.getName());
+    if (zConf.getBoolean(ZeppelinConfiguration.ConfVars.ZEPPELIN_HADOOP_LOCALFS_OVERRIDE)) {
+      // disable checksum for local file system. because interpreter.json may be updated by
+      // non-hadoop filesystem api
+      // disable caching for file:// scheme to avoid getting LocalFS which does CRC checks
+      LOGGER.info("Overriding fs.file.impl to RawLocalFileSystem");
+      this.hadoopConf.setBoolean("fs.file.impl.disable.cache", true);
+      this.hadoopConf.set("fs.file.impl", RawLocalFileSystem.class.getName());
+    }
     this.isSecurityEnabled = UserGroupInformation.isSecurityEnabled();
 
     try {

@@ -55,6 +55,9 @@ public class Util {
     final String regex = "^([0-9](.)){2}[0-9]";
     final Pattern pattern = Pattern.compile(regex);
     String version = projectProperties.getProperty(PROJECT_PROPERTIES_VERSION_KEY);
+    if (StringUtils.isEmpty(version)) {
+      return StringUtils.EMPTY;
+    }
     final Matcher matcher = pattern.matcher(version);
     if (matcher.find()) {
       return matcher.group(0);
