@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
@@ -34,6 +35,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.zeppelin.conf.ZeppelinConfiguration;
 import org.apache.zeppelin.realm.ActiveDirectoryGroupRealm;
 import org.apache.zeppelin.realm.LdapRealm;
+import org.apache.zeppelin.realm.kerberos.KerberosRealm;
 import org.apache.zeppelin.server.ZeppelinServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -249,6 +251,17 @@ public class SecurityUtils {
               roles = new HashSet<>(auth.getRoles());
             }
           } catch (NamingException e) {
+            LOGGER.error("Can't fetch roles", e);
+          }
+          break;
+        } else if (name.equals("org.apache.zeppelin.realm.kerberos.KerberosRealm")) {
+          try {
+            AuthorizationInfo auth = ((KerberosRealm) realm).doGetAuthorizationInfo(
+                new SimplePrincipalCollection(subject.getPrincipal(), realm.getName()));
+            if (auth != null) {
+              roles = new HashSet<>(auth.getRoles());
+            }
+          } catch (AuthorizationException e) {
             LOGGER.error("Can't fetch roles", e);
           }
           break;

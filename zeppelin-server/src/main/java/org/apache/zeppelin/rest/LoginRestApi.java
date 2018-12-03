@@ -18,6 +18,7 @@ package org.apache.zeppelin.rest;
 
 import com.google.gson.Gson;
 import javax.inject.Inject;
+import org.apache.hadoop.security.authentication.client.KerberosAuthenticator;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -28,6 +29,8 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.Subject;
 import org.apache.zeppelin.conf.ZeppelinConfiguration;
 import org.apache.zeppelin.notebook.Notebook;
+import org.apache.zeppelin.realm.kerberos.KerberosRealm;
+import org.apache.zeppelin.realm.kerberos.KerberosToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +78,7 @@ public class LoginRestApi {
   @GET
   @ZeppelinApi
   public Response getLogin(@Context HttpHeaders headers) {
+    LOG.info("VR46: inside getLogin()");
     JsonResponse response = null;
     if (isKnoxSSOEnabled()) {
       KnoxJwtRealm knoxJwtRealm = getJTWRealm();
@@ -97,8 +101,49 @@ public class LoginRestApi {
         response = new JsonResponse(Status.OK, "", data);
       }
       return response.build();
+    } else {
+      KerberosRealm kerberosRealm = getKerberosRealm();
+      if (null != kerberosRealm) {
+        try {
+          Map<String, Cookie> cookies = headers.getCookies();
+          KerberosToken kerberosToken = KerberosRealm.getKerberosTokenFromCookies(cookies);
+          if (null != kerberosToken) {
+            Subject currentUser = org.apache.shiro.SecurityUtils.getSubject();
+            String name = (String) kerberosToken.getPrincipal();
+            if (!currentUser.isAuthenticated() || !currentUser.getPrincipal().equals(name)) {
+              response = proceedToLogin(currentUser, kerberosToken);
+            }
+          }
+          if (null == response) {
+            LOG.warn("No Kerberos token received");
+            Map<String, String> data = new HashMap<>();
+            data.put(KerberosAuthenticator.WWW_AUTHENTICATE, KerberosAuthenticator.NEGOTIATE);
+            response = new JsonResponse(Status.UNAUTHORIZED, "", data);
+          }
+          return response.build();
+        } catch (AuthenticationException e){
+          LOG.error("Error in Login: " + e);
+        }
+      }
     }
     return new JsonResponse(Status.METHOD_NOT_ALLOWED).build();
+  }
+
+  private KerberosRealm getKerberosRealm() {
+    Collection realmsList = SecurityUtils.getRealmsList();
+    if (realmsList != null) {
+      for (Iterator<Realm> iterator = realmsList.iterator(); iterator.hasNext(); ) {
+        Realm realm = iterator.next();
+        String name = realm.getClass().getName();
+
+        LOG.debug("RealmClass.getName: " + name);
+
+        if (name.equals("org.apache.zeppelin.realm.kerberos.KerberosRealm")) {
+          return (KerberosRealm) realm;
+        }
+      }
+    }
+    return null;
   }
 
   private KnoxJwtRealm getJTWRealm() {
@@ -138,6 +183,7 @@ public class LoginRestApi {
     try {
       logoutCurrentUser();
       currentUser.getSession(true);
+      LOG.info("Try to login");
       currentUser.login(token);
 
       HashSet<String> roles = SecurityUtils.getAssociatedRoles();
@@ -187,12 +233,14 @@ public class LoginRestApi {
   @ZeppelinApi
   public Response postLogin(@FormParam("userName") String userName,
       @FormParam("password") String password) {
+    LOG.info("userName:" + userName);
     JsonResponse response = null;
     // ticket set to anonymous for anonymous user. Simplify testing.
     Subject currentUser = org.apache.shiro.SecurityUtils.getSubject();
     if (currentUser.isAuthenticated()) {
       currentUser.logout();
     }
+    LOG.info("currentUser: " + currentUser);
     if (!currentUser.isAuthenticated()) {
 
       UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
