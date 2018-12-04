@@ -424,9 +424,10 @@ public class KerberosRealm extends AuthorizingRealm {
       AuthenticationToken token;
       try {
         token = getToken(httpRequest);
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("Got token {} from httpRequest {}", token,
+        LOG.debug("Got token {} from httpRequest {}", token,
               getRequestURL(httpRequest));
+        if (null != token) {
+          LOG.debug("token.isExpired() : " + token.isExpired());
         }
       } catch (AuthenticationException ex) {
         LOG.warn("AuthenticationToken ignored: " + ex.getMessage());
@@ -437,7 +438,7 @@ public class KerberosRealm extends AuthorizingRealm {
         token = null;
       }
       if (managementOperation(token, httpRequest, httpResponse)) {
-        if (token == null) {
+        if (token == null || token.isExpired()) {
           if (LOG.isDebugEnabled()) {
             LOG.debug("Request [{}] triggering authentication. handler: {}",
                 getRequestURL(httpRequest), this.getClass());
@@ -497,9 +498,10 @@ public class KerberosRealm extends AuthorizingRealm {
             createAuthCookie(httpResponse, signedToken, getCookieDomain(),
                 getCookiePath(), token.getExpires(),
                 isCookiePersistent(), isHttps);
-            KerberosToken kerberosToken = new KerberosToken(token.getUserName(), token.toString());
-            SecurityUtils.getSubject().login(kerberosToken);
           }
+          // we will instantiate Shiro subject as long as token is available.
+          KerberosToken kerberosToken = new KerberosToken(token.getUserName(), token.toString());
+          SecurityUtils.getSubject().login(kerberosToken);
           doFilter(filterChain, httpRequest, httpResponse);
         }
       } else {
