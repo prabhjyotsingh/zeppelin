@@ -57,6 +57,7 @@
     <modules>
         <module>interpreter</module>
         <module>spark-scala-parent</module>
+        <module>scala-2.10</module>
         <module>scala-2.11</module>
         <module>spark-dependencies</module>
         <module>spark-shims</module>
@@ -160,8 +161,6 @@
                 </executions>
                 <configuration>
                     <scalaVersion>${scala.compile.version}</scalaVersion>
-                    <!--<recompileMode>incremental</recompileMode>-->
-                    <!--<useZincServer>true</useZincServer>-->
                     <args>
                         <arg>-unchecked</arg>
                         <arg>-deprecation</arg>
@@ -186,7 +185,6 @@
         </plugins>
     </build>
 
-
     <profiles>
 
         <profile>
@@ -196,6 +194,9 @@
                 <protobuf.version>2.5.0</protobuf.version>
                 <py4j.version>0.10.7</py4j.version>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
 
         <profile>
@@ -213,12 +214,6 @@
                 <spark.version>2.2.1</spark.version>
                 <py4j.version>0.10.4</py4j.version>
             </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>scala-2.10</module>
-            </modules>
         </profile>
 
         <profile>
@@ -227,9 +222,6 @@
                 <spark.version>2.1.2</spark.version>
                 <py4j.version>0.10.4</py4j.version>
             </properties>
-            <modules>
-                <module>scala-2.10</module>
-            </modules>
         </profile>
 
         <profile>
@@ -238,9 +230,6 @@
                 <spark.version>2.2.0</spark.version>
                 <py4j.version>0.10.3</py4j.version>
             </properties>
-            <modules>
-                <module>scala-2.10</module>
-            </modules>
         </profile>
 
         <profile>
@@ -249,26 +238,6 @@
                 <spark.version>2.2.0</spark.version>
                 <py4j.version>0.9</py4j.version>
             </properties>
-            <modules>
-                <module>scala-2.10</module>
-            </modules>
         </profile>
-
-        <profile>
-            <id>spark-1.5</id>
-            <properties>
-                <spark.version>2.2.0</spark.version>
-                <py4j.version>0.8.2.1</py4j.version>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>spark-1.4</id>
-            <properties>
-                <spark.version>2.2.0</spark.version>
-                <py4j.version>0.8.2.1</py4j.version>
-            </properties>
-        </profile>
-
     </profiles>
 </project>
