@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.zeppelin.rest;
+package org.apache.zeppelin.interpreter;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -24,17 +24,17 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(value = Parameterized.class)
-public class ZeppelinSparkClusterTest22 extends ZeppelinSparkClusterTest {
+public class SparkIntegrationTest20 extends SparkIntegrationTest{
 
-  public ZeppelinSparkClusterTest22(String sparkVersion) throws Exception {
+  public SparkIntegrationTest20(String sparkVersion) {
     super(sparkVersion);
   }
-
 
   @Parameterized.Parameters
   public static List<Object[]> data() {
     return Arrays.asList(new Object[][]{
-            {"2.2.1"}
+            {"2.0.2"}
     });
   }
+
 }
