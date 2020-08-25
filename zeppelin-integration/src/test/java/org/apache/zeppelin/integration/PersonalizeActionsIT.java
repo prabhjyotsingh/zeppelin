@@ -111,7 +111,7 @@ public class PersonalizeActionsIT extends AbstractZeppelinIT {
     waitForParagraph(1, "FINISHED");
   }
 
-  @Test
+  //@Test
   public void testSimpleAction() throws Exception {
     try {
       // step 1 : (admin) create a new note, run a paragraph and turn on personalized mode
