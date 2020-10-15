@@ -30,9 +30,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxDriver.SystemProperty;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.GeckoDriverService;
@@ -56,49 +54,48 @@ public class WebDriverManager {
   public static WebDriver getWebDriver() {
     WebDriver driver = null;
 
-    if (driver == null) {
-      try {
-        int firefoxVersion = WebDriverManager.getFirefoxVersion();
-        LOG.info("Firefox version " + firefoxVersion + " detected");
+    try {
+      int firefoxVersion = WebDriverManager.getFirefoxVersion();
+      LOG.info("Firefox version " + firefoxVersion + " detected");
 
-        downLoadsDir = FileUtils.getTempDirectory().toString();
+      downLoadsDir = FileUtils.getTempDirectory().toString();
 
-        String tempPath = downLoadsDir + "/firefox/";
+      String tempPath = downLoadsDir + "/firefox/";
 
-        downloadGeekoDriver(firefoxVersion, tempPath);
+      downloadGeekoDriver(firefoxVersion, tempPath);
 
-        FirefoxProfile profile = new FirefoxProfile();
-        profile.setPreference("browser.download.folderList", 2);
-        profile.setPreference("browser.download.dir", downLoadsDir);
-        profile.setPreference("browser.helperApps.alwaysAsk.force", false);
-        profile.setPreference("browser.download.manager.showWhenStarting", false);
-        profile.setPreference("browser.download.manager.showAlertOnComplete", false);
-        profile.setPreference("browser.download.manager.closeWhenDone", true);
-        profile.setPreference("app.update.auto", false);
-        profile.setPreference("app.update.enabled", false);
-        profile.setPreference("dom.max_script_run_time", 0);
-        profile.setPreference("dom.max_chrome_script_run_time", 0);
-        profile.setPreference("browser.helperApps.neverAsk.saveToDisk",
-            "application/x-ustar,application/octet-stream,application/zip,text/csv,text/plain");
-        profile.setPreference("network.proxy.type", 0);
+      FirefoxProfile profile = new FirefoxProfile();
+      profile.setPreference("browser.download.folderList", 2);
+      profile.setPreference("browser.download.dir", downLoadsDir);
+      profile.setPreference("browser.helperApps.alwaysAsk.force", false);
+      profile.setPreference("browser.download.manager.showWhenStarting", false);
+      profile.setPreference("browser.download.manager.showAlertOnComplete", false);
+      profile.setPreference("browser.download.manager.closeWhenDone", true);
+      profile.setPreference("app.update.auto", false);
+      profile.setPreference("app.update.enabled", false);
+      profile.setPreference("dom.max_script_run_time", 0);
+      profile.setPreference("dom.max_chrome_script_run_time", 0);
+      profile.setPreference("browser.helperApps.neverAsk.saveToDisk",
+          "application/x-ustar,application/octet-stream,application/zip,text/csv,text/plain");
+      profile.setPreference("network.proxy.type", 0);
 
-//        System.setProperty(SystemProperty.DRIVER_USE_MARIONETTE, "false");
+      FirefoxOptions firefoxOptions = new FirefoxOptions();
+      firefoxOptions.setProfile(profile);
 
-        FirefoxOptions firefoxOptions = new FirefoxOptions();
-        firefoxOptions.setProfile(profile);
-
-
-        driver = new FirefoxDriver(
-               new GeckoDriverService.Builder()
-                 .usingDriverExecutable(new File(tempPath + "geckodriver"))
-//                 .usingFirefoxBinary(new FirefoxBinary())
-                 .withEnvironment(ImmutableMap.of("DISPLAY", ":99"))
-                 .build(), firefoxOptions);
-
-
-      } catch (Exception e) {
-        LOG.error("Exception in WebDriverManager while FireFox Driver ", e);
+      ImmutableMap<String, String> is99Required = ImmutableMap.<String, String>builder().build();
+      if ("true".equals(System.getenv("TRAVIS"))) {
+        is99Required = ImmutableMap.of("DISPLAY", ":99");
       }
+
+      driver = new FirefoxDriver(
+             new GeckoDriverService.Builder()
+               .usingDriverExecutable(new File(tempPath + "geckodriver"))
+               .withEnvironment(is99Required)
+               .build(), firefoxOptions);
+
+
+    } catch (Exception e) {
+      LOG.error("Exception in WebDriverManager while FireFox Driver ", e);
     }
 
     if (driver == null) {
