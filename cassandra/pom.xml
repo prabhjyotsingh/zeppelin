@@ -60,10 +60,17 @@
             </exclusions>
         </dependency>
 
+        <!-- TODO(PrarthiJain): remove thrift dependency after this upgrade. -->
         <dependency>
             <groupId>com.datastax.oss</groupId>
             <artifactId>java-driver-core</artifactId>
             <version>${cassandra.driver.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.thrift</groupId>
+            <artifactId>libthrift</artifactId>
+            <version>0.13.0</version>
         </dependency>
 
         <!-- Compression libraries for the cassandra-driver protocol. -->
